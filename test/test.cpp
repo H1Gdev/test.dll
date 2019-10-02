@@ -4,9 +4,21 @@
 #include "pch.h"
 #include <iostream>
 
+#define TEST_DLL
+
+#ifdef TEST_DLL
+#include "test.dll.h"
+#endif
+
 int main()
 {
+#if defined TEST_DLL
+	test::DllClass test;
+	auto v = test.Test();
+	std::cout << "Test value is " << v << std::endl;
+#else
     std::cout << "Hello World!\n"; 
+#endif
 }
 
 // プログラムの実行: Ctrl + F5 または [デバッグ] > [デバッグなしで開始] メニュー
