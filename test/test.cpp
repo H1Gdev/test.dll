@@ -20,9 +20,14 @@
 #include <opencv2/opencv.hpp>
 
 #include <fstream>
+
+#define TEST_OPENCV_VIDEO
+#define TEST_OPENCV_VIDEO_OUTPUT_FRAME
+#define TEST_OPENCV_VIDEO_OUTPUT_VIDEO
+//#define TEST_OPENCV_VIDEO_OUTPUT_VIDEO_FRAME_CONVERSION
 #endif
 
-int main()
+int main(int argc, char* argv[])
 {
 #if defined TEST_DLL
     test::DllClass test;
@@ -35,6 +40,105 @@ int main()
     if (!ofs.bad())
         ofs << cv::getBuildInformation() << std::endl;
     ofs.close();
+
+#ifdef TEST_OPENCV_VIDEO
+    // input_file_path output_path
+    if (argc >= 3)
+    {
+        auto input = argv[1];
+        auto output = argv[2];
+
+        if (std::ifstream(input).is_open())	// file exists ?
+        {
+#if 0
+            cv::VideoCapture inputVideo(input);
+            if (inputVideo.isOpened())
+#else
+            cv::VideoCapture inputVideo;
+            if (inputVideo.open(input))
+#endif
+            {
+                std::cout << "[cv::VideoCapture]" << std::endl;
+                std::cout << "getBackendName()=" << inputVideo.getBackendName() << std::endl;
+                std::cout << "getExceptionMode()=" << inputVideo.getExceptionMode() << std::endl;
+
+                // output video props.
+                std::cout << "cv::CAP_PROP_POS_MSEC=" << inputVideo.get(cv::CAP_PROP_POS_MSEC) << "[ms]" << std::endl;
+                std::cout << "cv::CAP_PROP_POS_FRAMES=" << inputVideo.get(cv::CAP_PROP_POS_FRAMES) << "[frame]" << std::endl;
+                std::cout << "cv::CAP_PROP_FRAME_WIDTH=" << inputVideo.get(cv::CAP_PROP_FRAME_WIDTH) << "[pixel]" << std::endl;
+                std::cout << "cv::CAP_PROP_FRAME_HEIGHT=" << inputVideo.get(cv::CAP_PROP_FRAME_HEIGHT) << "[pixel]" << std::endl;
+                {
+                    auto fourcc = (int)inputVideo.get(cv::CAP_PROP_FOURCC);
+                    auto cc = (char*)&fourcc;
+                    std::cout << "cv::CAP_PROP_FOURCC=" << cc[0] << cc[1] << cc[2] << cc[3] << std::endl;
+                }
+                std::cout << "cv::CAP_PROP_FPS=" << inputVideo.get(cv::CAP_PROP_FPS) << "[fps]" << std::endl;
+                std::cout << "cv::CAP_PROP_FRAME_COUNT=" << inputVideo.get(cv::CAP_PROP_FRAME_COUNT) << "[frame]" << std::endl;
+
+#ifdef TEST_OPENCV_VIDEO_OUTPUT_VIDEO
+                cv::String outputVideoFilePath(output);
+                if (outputVideoFilePath.back() != '\\')
+                    outputVideoFilePath += '\\';
+                outputVideoFilePath += "video.mp4";
+
+                auto fourcc = (int)inputVideo.get(cv::CAP_PROP_FOURCC);
+                auto cc = (char*)&fourcc;
+                fourcc = cv::VideoWriter::fourcc(cc[0], cc[1], cc[2], cc[3]);
+                auto fps = inputVideo.get(cv::CAP_PROP_FPS);
+                cv::Size frameSize((int)inputVideo.get(cv::CAP_PROP_FRAME_WIDTH), (int)inputVideo.get(cv::CAP_PROP_FRAME_HEIGHT));
+#if 0
+                cv::VideoWriter outputVideo(outputVideoFilePath, fourcc, fps, frameSize);
+                if (!outputVideo.isOpened())
+                    throw std::exception("cv::VideoWriter is not opened.");
+#else
+                cv::VideoWriter outputVideo;
+                if (!outputVideo.open(outputVideoFilePath, fourcc, fps, frameSize))
+                    throw std::exception("cv::VideoWriter is not opened.");
+#endif
+                std::cout << "[cv::VideoWriter]" << std::endl;
+                std::cout << "getBackendName()=" << outputVideo.getBackendName() << std::endl;
+#endif
+
+                // output frames.
+                cv::Mat frame;
+                const auto frameCount = inputVideo.get(cv::CAP_PROP_FRAME_COUNT);
+                for (auto i = 0; i < frameCount; ++i)
+                {
+                    inputVideo >> frame;
+
+#ifdef TEST_OPENCV_VIDEO_OUTPUT_FRAME
+                    cv::String outputFrameFilePath(output);
+                    if (outputFrameFilePath.back() != '\\')
+                        outputFrameFilePath += '\\';
+#if 0
+                    outputFrameFilePath += "frame.";
+                    outputFrameFilePath += std::to_string(i);
+                    outputFrameFilePath += ".png";	// if OpenCV 3.x output only "bmp".
+#else
+                    std::ostringstream oss;
+                    oss << "frame." << std::setfill('0') << std::setw(4) << i << ".png";
+                    outputFrameFilePath += oss.str();
+#endif
+                    cv::imwrite(outputFrameFilePath, frame);
+#endif
+#ifdef TEST_OPENCV_VIDEO_OUTPUT_VIDEO
+#ifdef TEST_OPENCV_VIDEO_OUTPUT_VIDEO_FRAME_CONVERSION
+                    cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);
+#endif
+                    outputVideo << frame;
+#endif
+
+                    // next
+                    std::cout << inputVideo.get(cv::CAP_PROP_POS_MSEC) << "[ms], " << inputVideo.get(cv::CAP_PROP_POS_FRAMES) << " / " << frameCount << std::endl;
+                }
+#ifdef TEST_OPENCV_VIDEO_OUTPUT_VIDEO
+                outputVideo.release();
+#endif
+        }
+            inputVideo.release();
+    }
+}
+#endif
 #else
     std::cout << "Hello World!\n"; 
 #endif
