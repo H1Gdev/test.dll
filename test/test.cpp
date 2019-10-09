@@ -7,10 +7,19 @@
 // Google C++ Style Guide
 // https://google.github.io/styleguide/cppguide.html
 
-#define TEST_DLL
+//#define TEST_DLL
+#define TEST_OPENCV
 
 #ifdef TEST_DLL
 #include "test_dll.h"
+#endif
+
+#ifdef TEST_OPENCV
+//#pragma warning(disable : 4996)	// use unsafe function.
+
+#include <opencv2/opencv.hpp>
+
+#include <fstream>
 #endif
 
 int main()
@@ -19,6 +28,13 @@ int main()
     test::DllClass test;
     auto v = test.Test();
     std::cout << "Test value is " << v << std::endl;
+#elif defined TEST_OPENCV
+    std::cout << "OpenCV " << CV_VERSION << std::endl;
+
+    std::ofstream ofs("BuildInformation.txt");
+    if (!ofs.bad())
+        ofs << cv::getBuildInformation() << std::endl;
+    ofs.close();
 #else
     std::cout << "Hello World!\n"; 
 #endif
