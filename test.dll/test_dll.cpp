@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 
-#include "test.dll.h"
+#include "test_dll.h"
 
 namespace test {
 
@@ -15,11 +15,11 @@ public:
 
 	int Test();
 private:
-	int value;
+	int value_;
 };
 
 DllClass::Impl::Impl()
-	:value(100)
+	:value_(100)
 {
 }
 
@@ -29,23 +29,23 @@ DllClass::Impl::~Impl()
 
 int DllClass::Impl::Test()
 {
-	return value;
+	return value_;
 }
 
 
 DllClass::DllClass()
-	:pimpl(new Impl)
+	:impl_(new Impl)
 {
 }
 
 DllClass::~DllClass()
 {
-	delete pimpl;
+	delete impl_;
 }
 
 int DllClass::Test()
 {
-	return pimpl->Test();
+	return impl_->Test();
 }
 
 }

@@ -18,7 +18,7 @@ public:
 	int Test();
 private:
 	class Impl;
-	Impl* pimpl;
+	Impl* impl_;
 };
 
 }

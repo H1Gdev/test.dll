@@ -4,10 +4,13 @@
 #include "pch.h"
 #include <iostream>
 
+// Google C++ Style Guide
+// https://google.github.io/styleguide/cppguide.html
+
 #define TEST_DLL
 
 #ifdef TEST_DLL
-#include "test.dll.h"
+#include "test_dll.h"
 #endif
 
 int main()
