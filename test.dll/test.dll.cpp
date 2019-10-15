@@ -7,34 +7,34 @@
 
 namespace test {
 
-class DllClassImpl
+class DllClass::Impl
 {
 public:
-	DllClassImpl();
-	~DllClassImpl();
+	Impl();
+	~Impl();
 
 	int Test();
 private:
 	int value;
 };
 
-DllClassImpl::DllClassImpl()
+DllClass::Impl::Impl()
 	:value(100)
 {
 }
 
-DllClassImpl::~DllClassImpl()
+DllClass::Impl::~Impl()
 {
 }
 
-int DllClassImpl::Test()
+int DllClass::Impl::Test()
 {
 	return value;
 }
 
 
 DllClass::DllClass()
-	:pimpl(new DllClassImpl)
+	:pimpl(new Impl)
 {
 }
 

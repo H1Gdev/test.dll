@@ -17,7 +17,8 @@ public:
 
 	int Test();
 private:
-	class DllClassImpl* pimpl;
+	class Impl;
+	Impl* pimpl;
 };
 
 }
