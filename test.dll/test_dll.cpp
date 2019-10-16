@@ -38,10 +38,7 @@ DllClass::DllClass()
 {
 }
 
-DllClass::~DllClass()
-{
-	delete impl_;
-}
+DllClass::~DllClass() = default;
 
 int DllClass::Test()
 {

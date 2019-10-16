@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #ifdef TESTDLL_EXPORTS
 #define TESTDLL_API __declspec(dllexport)
 #else
@@ -15,10 +17,13 @@ public:
 	DllClass();
 	~DllClass();
 
+	DllClass(const DllClass&) = delete;
+	DllClass& operator=(const DllClass&) = delete;
+
 	int Test();
 private:
 	class Impl;
-	Impl* impl_;
+	std::unique_ptr<Impl> impl_;
 };
 
 }
