@@ -7,10 +7,15 @@
 // Google C++ Style Guide
 // https://google.github.io/styleguide/cppguide.html
 
-#define TEST_DLL
+//#define TEST_DLL
+#define TEST_C_PLUS_PLUS_ELEVEN
 
 #ifdef TEST_DLL
 #include "test_dll.h"
+#endif
+
+#ifdef TEST_C_PLUS_PLUS_ELEVEN
+void test_cpp_eleven();
 #endif
 
 int main()
@@ -19,6 +24,8 @@ int main()
     test::DllClass test;
     auto v = test.Test();
     std::cout << "Test value is " << v << std::endl;
+#elif defined TEST_C_PLUS_PLUS_ELEVEN
+    test_cpp_eleven();
 #else
     std::cout << "Hello World!\n"; 
 #endif
