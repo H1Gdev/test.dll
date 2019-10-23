@@ -1,0 +1,16 @@
+# .editorconfig について詳しくは、次をご覧ください https://aka.ms/editorconfigdocs
+
+# EditorConfig
+# https://editorconfig.org/
+# https://github.com/editorconfig/
+
+root = true
+
+# All files
+[*]
+charset = utf-8-bom
+end_of_line = crlf
+insert_final_newline = true
+indent_size = 4
+indent_style = space
+trim_trailing_whitespace = true
