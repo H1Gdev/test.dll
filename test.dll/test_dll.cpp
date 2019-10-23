@@ -10,16 +10,16 @@ namespace test {
 class DllClass::Impl
 {
 public:
-	Impl();
-	~Impl();
+    Impl();
+    ~Impl();
 
-	int Test();
+    int Test();
 private:
-	int value_;
+    int value_;
 };
 
 DllClass::Impl::Impl()
-	:value_(100)
+    :value_(100)
 {
 }
 
@@ -29,12 +29,12 @@ DllClass::Impl::~Impl()
 
 int DllClass::Impl::Test()
 {
-	return value_;
+    return value_;
 }
 
 
 DllClass::DllClass()
-	:impl_(new Impl)
+    :impl_(new Impl)
 {
 }
 
@@ -42,7 +42,7 @@ DllClass::~DllClass() = default;
 
 int DllClass::Test()
 {
-	return impl_->Test();
+    return impl_->Test();
 }
 
 }

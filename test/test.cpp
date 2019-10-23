@@ -16,9 +16,9 @@
 int main()
 {
 #if defined TEST_DLL
-	test::DllClass test;
-	auto v = test.Test();
-	std::cout << "Test value is " << v << std::endl;
+    test::DllClass test;
+    auto v = test.Test();
+    std::cout << "Test value is " << v << std::endl;
 #else
     std::cout << "Hello World!\n"; 
 #endif

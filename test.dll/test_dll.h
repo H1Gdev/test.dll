@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <memory>
 
@@ -14,16 +14,16 @@ namespace test {
 class TESTDLL_API DllClass
 {
 public:
-	DllClass();
-	~DllClass();
+    DllClass();
+    ~DllClass();
 
-	DllClass(const DllClass&) = delete;
-	DllClass& operator=(const DllClass&) = delete;
+    DllClass(const DllClass&) = delete;
+    DllClass& operator=(const DllClass&) = delete;
 
-	int Test();
+    int Test();
 private:
-	class Impl;
-	std::unique_ptr<Impl> impl_;
+    class Impl;
+    std::unique_ptr<Impl> impl_;
 };
 
 }
