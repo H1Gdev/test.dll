@@ -18,12 +18,12 @@ private:
     int value_;
 };
 
-DllClass::Impl::Impl()
+inline DllClass::Impl::Impl()
     :value_(100)
 {
 }
 
-DllClass::Impl::~Impl()
+inline DllClass::Impl::~Impl()
 {
 }
 
